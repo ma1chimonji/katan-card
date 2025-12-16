@@ -25,30 +25,33 @@ html, body {
     align-items: center;
     justify-content: center;
     position: relative;
+    padding: 20px; /* 画面端との余白 */
+    box-sizing: border-box;
 }
 
 #info-bar {
     position: absolute;
-    top: 10px;
-    right: 20px;
-    color: #888;
-    font-size: 0.9rem;
+    top: 15px;
+    right: 25px;
+    color: #aaa;
+    font-size: 1rem;
     z-index: 10;
+    font-weight: bold;
+    letter-spacing: 1px;
 }
 
 .card-area {
     width: 100%;
     height: 100%;
-    padding: 15px;
-    box-sizing: border-box;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
+/* --- カードの基本スタイル（スマホ・モバイル優先） --- */
 .card {
     width: 100%;
-    height: 100%;
+    height: 100%; /* スマホでは画面いっぱい */
     max-width: 600px;
     background-color: var(--card-bg);
     border: 10px solid var(--card-border);
@@ -58,17 +61,18 @@ html, body {
     flex-direction: column;
     position: relative;
     cursor: pointer;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5); /* 影をつけて浮遊感 */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+/* 裏面デザイン */
 .card.back {
     background-color: #5a3a22;
     border-color: #3e2723;
     justify-content: center;
     align-items: center;
 }
-.card.back .card-content {
-    display: none;
-}
+.card.back .card-content { display: none; }
 .card.back::after {
     content: "TAP TO DRAW";
     color: #ffd700;
@@ -80,12 +84,13 @@ html, body {
     opacity: 0.5;
 }
 
+/* カード内部レイアウト */
 .card-content {
     height: 100%;
     width: 100%;
     display: flex;
     flex-direction: column;
-    padding: 10px;
+    padding: 15px;
     box-sizing: border-box;
 }
 
@@ -113,7 +118,10 @@ html, body {
     margin-right: 5px;
 }
 
-.num-6 .card-number, .num-8 .card-number { color: var(--accent-red); border-color: var(--accent-red); }
+.num-6 .card-number, .num-8 .card-number { 
+    color: var(--accent-red); 
+    border-color: var(--accent-red); 
+}
 
 .card-body {
     height: 85%;
@@ -144,7 +152,20 @@ html, body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start; /* 上寄せ */
+    justify-content: flex-start;
+    
+    /* スクロールバーのデザイン（Webkit系） */
+    scrollbar-width: thin;
+    scrollbar-color: #d4a017 transparent;
+}
+
+/* スクロールバーの微調整 */
+.card-text-container::-webkit-scrollbar {
+    width: 6px;
+}
+.card-text-container::-webkit-scrollbar-thumb {
+    background-color: #d4a017;
+    border-radius: 3px;
 }
 
 .card-text {
@@ -154,12 +175,14 @@ html, body {
     width: 100%;
 }
 
-/* 「都市と騎士版」の文字を強調 */
 .card-text strong {
     color: #8b0000;
     font-weight: bold;
     display: inline-block;
     margin-top: 10px;
+    background: rgba(255,255,255,0.5);
+    padding: 2px 5px;
+    border-radius: 4px;
 }
 
 .card.new-year {
@@ -168,4 +191,28 @@ html, body {
 }
 .card.new-year .card-title {
     color: #006064;
+}
+
+/* --- PC・タブレット向けのレスポンシブ対応 --- */
+@media (min-width: 768px) {
+    .card {
+        height: auto;          /* 高さを自動調整 */
+        aspect-ratio: 5 / 7.5; /* カードらしい縦横比を維持 */
+        max-height: 85vh;      /* 画面からはみ出さないように制限 */
+        max-width: 55vh;       /* 横幅も高さに合わせて制限（縦長維持） */
+    }
+
+    /* マウスホバー時に少し浮き上がる演出（PCのみ） */
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+    }
+    
+    /* 画面が大きいので文字サイズを少し大きく調整 */
+    .card-title {
+        font-size: 2rem;
+    }
+    .card-text {
+        font-size: 1.2rem;
+    }
 }
